@@ -6,5 +6,6 @@ public class TransferRequest {
 
     private String sourceAccountId;
     private String destinationAccountId;
-    private BigDecimal
+    private BigDecimal amount;
+    private String currency;
 }

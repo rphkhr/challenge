@@ -1,6 +1,7 @@
 package com.swissquote.module.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity(name = "accounts")
 public class Account {
@@ -28,6 +30,10 @@ public class Account {
 
     @CreationTimestamp
     private Timestamp created;
+
+    @OneToMany(mappedBy = "sourceAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<Transaction> transactions;
 
     public Account() {
     }
@@ -72,15 +78,12 @@ public class Account {
         this.created = created;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("id", id)
-                .append("person", person)
-                .append("balance", balance)
-                .append("currency", currency)
-                .append("created", created)
-                .toString();
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override
@@ -93,9 +96,11 @@ public class Account {
 
         return new EqualsBuilder()
                 .append(id, account.id)
+                .append(person, account.person)
                 .append(balance, account.balance)
                 .append(currency, account.currency)
                 .append(created, account.created)
+                .append(transactions, account.transactions)
                 .isEquals();
     }
 
@@ -103,9 +108,24 @@ public class Account {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(id)
+                .append(person)
                 .append(balance)
                 .append(currency)
                 .append(created)
+                .append(transactions)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("person", person)
+                .append("balance", balance)
+                .append("currency", currency)
+                .append("created", created)
+                .append("transactions", transactions)
+                .toString();
+    }
+
 }

@@ -1,13 +1,11 @@
 package com.swissquote.module.entity;
 
-import com.swissquote.module.utils.TransactionType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "transactions")
@@ -17,11 +15,19 @@ public class Transaction {
     @GeneratedValue
     private String id;
 
-    private TransactionType transactionType;
+    private String transactionType;
 
     private BigDecimal amount;
     private String currency;
+
+    @ManyToOne
+    @JoinColumn(name = "source_account")
+    @JsonBackReference
     private Account sourceAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "target_account")
+    @JsonBackReference
     private Account targetAccount;
 
     public String getId() {
@@ -32,11 +38,11 @@ public class Transaction {
         this.id = id;
     }
 
-    public TransactionType getTransactionType() {
+    public String getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(TransactionType transactionType) {
+    public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
 
