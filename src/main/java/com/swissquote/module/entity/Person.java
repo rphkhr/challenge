@@ -1,13 +1,17 @@
 package com.swissquote.module.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Entity(name = "persons")
 public class Person {
@@ -19,6 +23,13 @@ public class Person {
 
     @JsonIgnore
     private Date dateOfBirth;
+
+    @Transient
+    private Map<String, BigDecimal> accountsBalance;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<Account> accounts = new HashSet<>();
 
     public Person() {
     }
@@ -47,6 +58,22 @@ public class Person {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public Map<String, BigDecimal> getAccountsBalance() {
+        return accountsBalance;
+    }
+
+    public void setAccountsBalance(Map<String, BigDecimal> accountsBalance) {
+        this.accountsBalance = accountsBalance;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,6 +86,7 @@ public class Person {
                 .append(id, person.id)
                 .append(fullName, person.fullName)
                 .append(dateOfBirth, person.dateOfBirth)
+                .append(accounts, person.accounts)
                 .isEquals();
     }
 
@@ -68,6 +96,7 @@ public class Person {
                 .append(id)
                 .append(fullName)
                 .append(dateOfBirth)
+                .append(accounts)
                 .toHashCode();
     }
 
@@ -77,6 +106,8 @@ public class Person {
                 .append("id", id)
                 .append("fullName", fullName)
                 .append("dateOfBirth", dateOfBirth)
+                .append("accountsBalance", accountsBalance)
+                .append("accounts", accounts)
                 .toString();
     }
 

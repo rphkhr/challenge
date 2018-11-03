@@ -57,9 +57,8 @@ public class PersonServiceImpl implements PersonService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(createPersonRequest.getDateOfBirth());
         StringBuilder builder = new StringBuilder()
-                .append(createPersonRequest.getLastName())
-                .append("-")
-                .append(createPersonRequest.getFirstName())
+                .append(createPersonRequest.getFirstName().substring(0,1))
+                .append(createPersonRequest.getLastName().substring(0,1))
                 .append("-")
                 .append(cal.getTimeInMillis() / 1000)
                 //add random to allow multiple persons with same name and DOB
