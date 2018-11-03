@@ -14,18 +14,82 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
 
 group = 'com.swissquote'
 version = '1'
 sourceCompatibility = 1.8
 
+def projectArchive = name
+def userAppProperties = ['*.properties', '*.der', '*.pem', '*.p12', '*.xml', '*.txt', '/static/']
+
+def sharedManifest = manifest {
+    attributes(
+            "Implementation-Title": projectArchive,
+            "Implementation-Version": version
+    )
+}
+
+def buildjar = jar {
+
+    baseName = projectArchive
+    exclude userAppProperties
+    manifest = project.manifest {
+        from sharedManifest
+    }
+}
+
+war {
+    dependsOn buildjar
+
+    manifest = project.manifest {
+        from sharedManifest
+    }
+
+    baseName = projectArchive
+    archiveName = projectArchive + ".war"
+
+    classpath = classpath - sourceSets.main.output
+
+    from (sourceSets.main.resources) {
+        into 'WEB-INF/classes'
+        include userAppProperties
+    }
+
+    from (buildjar.archivePath) {
+        into 'WEB-INF/lib'
+    }
+}
+
 repositories {
     mavenCentral()
 }
 
+configurations {
+    jaxb
+    providedRuntime
+    runtime.exclude group: "org.slf4j", module: "slf4j-simple"
+//	 dependencyManagement.imports {'org.apache.logging.log4j:log4j-bom:2.9.1'}
+    all {
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        exclude module : 'logback-classic'
+        exclude module : 'spring-boot-starter-logging'
+
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.name == 'log4j') {
+                details.useTarget "org.slf4j:log4j-over-slf4j:1.7.25"
+            }
+
+            if (details.requested.name == 'commons-logging') {
+                details.useTarget "org.slf4j:jcl-over-slf4j:1.7.25"
+            }
+        }
+    }
+}
 
 dependencies {
 
+    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
     compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compile("org.springframework.boot:spring-boot-starter-web-services")
