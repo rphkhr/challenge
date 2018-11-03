@@ -1,22 +1,27 @@
 # SQ Coding Challenge
 
-One Paragraph of project description goes here
-
 ## Getting Started
 
-MySQL
-SpringBoot v1.5.9
-Using Flyway to initialize the database (scripts can be found here)
-Gradle
-Wildfly
+* MySQL
+
+* SpringBoot v1.5.9
+
+* Using Flyway to initialize the database (scripts can be found here)
+
+* Gradle
+
+* Wildfly
 
 ### Prerequisites
 
 Connecting to the DB:
+
 1- Create a schema called 'sqchallenge'
-2- In file application.properties, input username-password
+
+2- In file application.properties, input root-admin to username-password of the MySQL server
 
 Build the war, deploy in AS of your choice (Wildfly or Tomcat), with application-context 'challenge'
+
 Postman collection can be found [here](https://www.getpostman.com/collections/db5884a72d44bc41472d)
 
 ## Endpoints available
@@ -27,7 +32,7 @@ Create Person: Creates a person and returns his unique ID
 
 Get Person: Retrieves a person's accounts, and list of transactions for these accounts (where they are the source account)
 
-### Accounts
+### Account
 
 Create Account: Creates an account for this person and returns its DB ID
 
@@ -50,4 +55,4 @@ Time tracked using the commit messages (4h10mn). Last commit was for writing the
  
 ## Bugs
 
-In GetAccount, should return account instead of accountId :(
+In [GetAccount](https://github.com/rphkhr/challenge/blob/367d3be18d8ed41c801eff66e0004d99a299dbc7/src/main/java/com/swissquote/module/service/impl/AccountServiceImpl.java#L51), should return account instead of accountId :(
