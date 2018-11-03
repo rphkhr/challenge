@@ -20,7 +20,7 @@ public class PersonController {
     @PostMapping(value = "/create",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person addPerson(HttpServletRequest request, @RequestBody CreatePersonRequest createPersonRequest) {
+    public Person createPerson(HttpServletRequest request, @RequestBody CreatePersonRequest createPersonRequest) {
         return personService.createPerson(createPersonRequest);
     }
 

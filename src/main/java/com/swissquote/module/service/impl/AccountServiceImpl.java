@@ -9,8 +9,6 @@ import com.swissquote.module.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -21,7 +19,7 @@ public class AccountServiceImpl implements AccountService {
     private PersonRepository personRepository;
 
     @Override
-    public Person createAccount(CreateAccountRequest createAccountRequest) {
+    public Account createAccount(CreateAccountRequest createAccountRequest) {
 
         Person person = personRepository.findOne(createAccountRequest.getPersonId());
 
@@ -31,10 +29,9 @@ public class AccountServiceImpl implements AccountService {
             account.setBalance(createAccountRequest.getBalance());
             account.setCurrency(createAccountRequest.getCurrency());
 
-            Set<Account> personAccounts = person.getAccounts();
-            personAccounts.add(account);
-            person.setAccounts(personAccounts);
-            return personRepository.save(person);
+            accountRepository.save(account);
+
+            return account;
 
         }
 

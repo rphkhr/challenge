@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Entity(name = "accounts")
 public class Account {
@@ -23,6 +25,9 @@ public class Account {
     private BigDecimal balance;
 
     private String currency;
+
+    @CreationTimestamp
+    private Timestamp created;
 
     public Account() {
     }
@@ -59,6 +64,14 @@ public class Account {
         this.balance = balance;
     }
 
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -66,6 +79,7 @@ public class Account {
                 .append("person", person)
                 .append("balance", balance)
                 .append("currency", currency)
+                .append("created", created)
                 .toString();
     }
 
@@ -81,6 +95,7 @@ public class Account {
                 .append(id, account.id)
                 .append(balance, account.balance)
                 .append(currency, account.currency)
+                .append(created, account.created)
                 .isEquals();
     }
 
@@ -90,7 +105,7 @@ public class Account {
                 .append(id)
                 .append(balance)
                 .append(currency)
+                .append(created)
                 .toHashCode();
     }
-
 }

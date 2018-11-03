@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity(name = "persons")
 public class Person {
@@ -23,6 +23,9 @@ public class Person {
 
     @JsonIgnore
     private Date dateOfBirth;
+
+    @CreationTimestamp
+    private Timestamp created;
 
     @Transient
     private Map<String, BigDecimal> accountsBalance;
@@ -74,6 +77,14 @@ public class Person {
         this.accountsBalance = accountsBalance;
     }
 
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,6 +97,8 @@ public class Person {
                 .append(id, person.id)
                 .append(fullName, person.fullName)
                 .append(dateOfBirth, person.dateOfBirth)
+                .append(created, person.created)
+                .append(accountsBalance, person.accountsBalance)
                 .append(accounts, person.accounts)
                 .isEquals();
     }
@@ -96,6 +109,8 @@ public class Person {
                 .append(id)
                 .append(fullName)
                 .append(dateOfBirth)
+                .append(created)
+                .append(accountsBalance)
                 .append(accounts)
                 .toHashCode();
     }
@@ -106,9 +121,29 @@ public class Person {
                 .append("id", id)
                 .append("fullName", fullName)
                 .append("dateOfBirth", dateOfBirth)
+                .append("created", created)
                 .append("accountsBalance", accountsBalance)
                 .append("accounts", accounts)
                 .toString();
     }
 
+    public void calculateBalanceByCurrency() {
+        Map<String, BigDecimal> accountsBalances = new HashMap<>();
+
+        Map<String, List<Account>> accountGroupedByCurrency =
+                accounts.stream()
+                        .collect(Collectors.groupingBy(Account::getCurrency));
+
+        BigDecimal tmp = BigDecimal.ZERO;
+        for (Map.Entry<String, List<Account>> entry : accountGroupedByCurrency.entrySet()) {
+            for (Account account : entry.getValue()) {
+                tmp = tmp.add(account.getBalance());
+            }
+            accountsBalances.put(entry.getKey(), tmp);
+            tmp = BigDecimal.ZERO;
+        }
+
+        setAccountsBalance(accountsBalances);
+
+    }
 }

@@ -49,7 +49,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person getPerson(String personId) {
-        return personRepository.findOne(personId);
+        Person person = personRepository.findOne(personId);
+        person.calculateBalanceByCurrency();
+        return person;
     }
 
     private String createPersonID(CreatePersonRequest createPersonRequest) {
