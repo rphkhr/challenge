@@ -2,7 +2,6 @@ package com.swissquote.module.controller;
 
 import com.swissquote.module.dto.CreateAccountRequest;
 import com.swissquote.module.entity.Account;
-import com.swissquote.module.entity.Person;
 import com.swissquote.module.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
