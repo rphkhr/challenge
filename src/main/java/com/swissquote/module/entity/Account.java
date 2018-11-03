@@ -96,7 +96,6 @@ public class Account {
 
         return new EqualsBuilder()
                 .append(id, account.id)
-                .append(person, account.person)
                 .append(balance, account.balance)
                 .append(currency, account.currency)
                 .append(created, account.created)
@@ -108,7 +107,6 @@ public class Account {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(id)
-                .append(person)
                 .append(balance)
                 .append(currency)
                 .append(created)

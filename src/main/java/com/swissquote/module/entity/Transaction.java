@@ -104,8 +104,6 @@ public class Transaction {
                 .append(transactionType, that.transactionType)
                 .append(amount, that.amount)
                 .append(currency, that.currency)
-                .append(sourceAccount, that.sourceAccount)
-                .append(targetAccount, that.targetAccount)
                 .isEquals();
     }
 
@@ -116,8 +114,6 @@ public class Transaction {
                 .append(transactionType)
                 .append(amount)
                 .append(currency)
-                .append(sourceAccount)
-                .append(targetAccount)
                 .toHashCode();
     }
 }
