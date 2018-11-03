@@ -13,7 +13,7 @@ public class CreatePersonRequest {
     private String firstName;
     private String lastName;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
 
     public String getFirstName() {

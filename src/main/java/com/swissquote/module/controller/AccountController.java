@@ -1,8 +1,8 @@
 package com.swissquote.module.controller;
 
 import com.swissquote.module.dto.CreateAccountRequest;
-import com.swissquote.module.entity.Account;
 import com.swissquote.module.service.AccountService;
+import com.swissquote.module.utils.SQResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +20,13 @@ public class AccountController {
     @PostMapping(value = "/create",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Account createAccount(HttpServletRequest request, @RequestBody CreateAccountRequest createAccountRequest) {
+    public SQResponse createAccount(HttpServletRequest request, @RequestBody CreateAccountRequest createAccountRequest) {
         return accountService.createAccount(createAccountRequest);
     }
 
     @GetMapping(value = "/get/{id}")
-    public Account retrievePerson(HttpServletRequest request, HttpServletResponse response,
-                                 @PathVariable(value = "id") String accountId) {
+    public SQResponse retrievePerson(HttpServletRequest request, HttpServletResponse response,
+                                     @PathVariable(value = "id") String accountId) {
         return accountService.getAccount(accountId);
     }
 }

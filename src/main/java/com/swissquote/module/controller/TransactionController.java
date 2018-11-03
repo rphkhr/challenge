@@ -2,8 +2,8 @@ package com.swissquote.module.controller;
 
 import com.swissquote.module.dto.CashInOutRequest;
 import com.swissquote.module.dto.TransferRequest;
-import com.swissquote.module.entity.Transaction;
 import com.swissquote.module.service.TransactionService;
+import com.swissquote.module.utils.SQResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,21 +23,21 @@ public class TransactionController {
     @PostMapping(value = "/cashin",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Transaction cashIn(HttpServletRequest request, @RequestBody CashInOutRequest cashInOutRequest) {
+    public SQResponse cashIn(HttpServletRequest request, @RequestBody CashInOutRequest cashInOutRequest) {
         return transactionService.cashIn(cashInOutRequest);
     }
 
     @PostMapping(value = "/cashout",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Transaction cashOut(HttpServletRequest request, @RequestBody CashInOutRequest cashInOutRequest) {
+    public SQResponse cashOut(HttpServletRequest request, @RequestBody CashInOutRequest cashInOutRequest) {
         return transactionService.cashOut(cashInOutRequest);
     }
 
     @PostMapping(value = "/transfer",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Transaction transfer(HttpServletRequest request, @RequestBody TransferRequest transferRequest) {
+    public SQResponse transfer(HttpServletRequest request, @RequestBody TransferRequest transferRequest) {
         return transactionService.transfer(transferRequest);
     }
 

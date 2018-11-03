@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Entity(name = "transactions")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -23,6 +25,9 @@ public class Transaction {
 
     private BigDecimal amount;
     private String currency;
+
+    @CreationTimestamp
+    private Timestamp created;
 
     @ManyToOne
     @JoinColumn(name = "source_account")
@@ -82,6 +87,13 @@ public class Transaction {
         this.targetAccount = targetAccount;
     }
 
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
 
     @Override
     public String toString() {
@@ -90,6 +102,7 @@ public class Transaction {
                 .append("transactionType", transactionType)
                 .append("amount", amount)
                 .append("currency", currency)
+                .append("created", created)
                 .append("sourceAccount", sourceAccount)
                 .append("targetAccount", targetAccount)
                 .toString();
@@ -108,6 +121,7 @@ public class Transaction {
                 .append(transactionType, that.transactionType)
                 .append(amount, that.amount)
                 .append(currency, that.currency)
+                .append(created, that.created)
                 .isEquals();
     }
 
@@ -118,6 +132,7 @@ public class Transaction {
                 .append(transactionType)
                 .append(amount)
                 .append(currency)
+                .append(created)
                 .toHashCode();
     }
 }

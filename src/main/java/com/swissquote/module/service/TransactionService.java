@@ -2,12 +2,12 @@ package com.swissquote.module.service;
 
 import com.swissquote.module.dto.CashInOutRequest;
 import com.swissquote.module.dto.TransferRequest;
-import com.swissquote.module.entity.Transaction;
+import com.swissquote.module.utils.SQResponse;
 
 public interface TransactionService {
-    Transaction cashIn(CashInOutRequest cashInOutRequest);
+    SQResponse cashIn(CashInOutRequest cashInOutRequest);
 
-    Transaction cashOut(CashInOutRequest cashInOutRequest);
+    SQResponse cashOut(CashInOutRequest cashInOutRequest);
 
-    Transaction transfer(TransferRequest transferRequest);
+    SQResponse transfer(TransferRequest transferRequest);
 }

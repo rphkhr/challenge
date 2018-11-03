@@ -1,11 +1,11 @@
 package com.swissquote.module.service;
 
 import com.swissquote.module.dto.CreateAccountRequest;
-import com.swissquote.module.entity.Account;
+import com.swissquote.module.utils.SQResponse;
 
 public interface AccountService {
 
-    Account createAccount(CreateAccountRequest createAccountRequest);
+    SQResponse createAccount(CreateAccountRequest createAccountRequest);
 
-    Account getAccount(String accountId);
+    SQResponse getAccount(String accountId);
 }

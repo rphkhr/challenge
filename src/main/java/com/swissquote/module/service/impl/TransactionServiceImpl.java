@@ -7,6 +7,7 @@ import com.swissquote.module.entity.Transaction;
 import com.swissquote.module.repository.AccountRepository;
 import com.swissquote.module.repository.TransactionRepository;
 import com.swissquote.module.service.TransactionService;
+import com.swissquote.module.utils.SQResponse;
 import com.swissquote.module.utils.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,13 @@ public class TransactionServiceImpl implements TransactionService {
     private AccountRepository accountRepository;
 
     @Override
-    public Transaction cashIn(CashInOutRequest cashInOutRequest) {
+    public SQResponse cashIn(CashInOutRequest cashInOutRequest) {
         Account account = accountRepository.findOne(cashInOutRequest.getAccountId());
-        if (account == null) return null;
+        if (account == null) return new SQResponse("Could not find account in DB");
 
         //Validate same currency
         if (!account.getCurrency().equalsIgnoreCase(cashInOutRequest.getCurrency())) {
-            return null;
+            return new SQResponse("Currency conversion not available, try topping up in your account's currency");
         }
 
 
@@ -43,20 +44,20 @@ public class TransactionServiceImpl implements TransactionService {
 
         accountRepository.setNewAccountBalance(account.getId(), newAccountBalance);
 
-        return transactionRepository.save(transaction);
+        return new SQResponse(transactionRepository.save(transaction));
     }
 
     @Override
-    public Transaction cashOut(CashInOutRequest cashInOutRequest) {
+    public SQResponse cashOut(CashInOutRequest cashInOutRequest) {
         Account account = accountRepository.findOne(cashInOutRequest.getAccountId());
         if (account == null) return null;
 
         if (account.getBalance().subtract(cashInOutRequest.getAmount()).compareTo(BigDecimal.ZERO) < 1) {
-            return null;
+            return new SQResponse("Cannot withdraw more money than what you have in bank");
         }
 
         if (!account.getCurrency().equalsIgnoreCase(cashInOutRequest.getCurrency())) {
-            return null;
+            return new SQResponse("Currency conversion not available, try withdrawing in your account's currency");
         }
 
         Transaction transaction = new Transaction();
@@ -68,28 +69,32 @@ public class TransactionServiceImpl implements TransactionService {
 
         accountRepository.setNewAccountBalance(account.getId(), newAccountBalance);
 
-        return transactionRepository.save(transaction);
+        return new SQResponse(transactionRepository.save(transaction));
     }
 
     @Override
-    public Transaction transfer(TransferRequest request) {
+    public SQResponse transfer(TransferRequest request) {
         Account srcAccount = accountRepository.findOne(request.getSourceAccountId());
-        if (srcAccount == null) return null;
+        if (srcAccount == null)
+            return new SQResponse("Could not find source account in DB");
+
 
         Account dstAccount = accountRepository.findOne(request.getDestinationAccountId());
-        if (dstAccount == null) return null;
+        if (dstAccount == null)
+            return new SQResponse("Could not find target account in DB");
+
 
         if (srcAccount.getBalance().subtract(request.getAmount()).compareTo(BigDecimal.ZERO) < 1) {
-            return null;
+            return new SQResponse("Cannot transfer more than what you have in DB");
         }
 
         //Validate currencies
         if (!srcAccount.getCurrency().equalsIgnoreCase(request.getCurrency())) {
-            return null;
+            return new SQResponse("Currency conversion not available, try withdrawing in your account's currency");
         }
 
         if (!dstAccount.getCurrency().equalsIgnoreCase(request.getCurrency())) {
-            return null;
+            return new SQResponse("Currency conversion not available, try withdrawing in your account's currency");
         }
 
         //Create tx object
@@ -109,6 +114,6 @@ public class TransactionServiceImpl implements TransactionService {
         accountRepository.setNewAccountBalance(dstAccount.getId(), newDestinationAccountBalance);
 
         // return saved transaction
-        return transactionRepository.save(transaction);
+        return new SQResponse(transactionRepository.save(transaction));
     }
 }
