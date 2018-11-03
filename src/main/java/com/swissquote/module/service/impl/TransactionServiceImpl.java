@@ -22,12 +22,18 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private AccountRepository accountRepository;
 
-
     @Override
     public Transaction cashIn(CashInOutRequest cashInOutRequest) {
         Account account = accountRepository.findOne(cashInOutRequest.getAccountId());
         if (account == null) return null;
 
+        //Validate same currency
+        if (!account.getCurrency().equalsIgnoreCase(cashInOutRequest.getCurrency())) {
+            return null;
+        }
+
+
+        //Create tx object
         Transaction transaction = new Transaction();
         transaction.setAmount(cashInOutRequest.getAmount());
         transaction.setCurrency(cashInOutRequest.getCurrency());
@@ -46,6 +52,10 @@ public class TransactionServiceImpl implements TransactionService {
         if (account == null) return null;
 
         if (account.getBalance().subtract(cashInOutRequest.getAmount()).compareTo(BigDecimal.ZERO) < 1) {
+            return null;
+        }
+
+        if (!account.getCurrency().equalsIgnoreCase(cashInOutRequest.getCurrency())) {
             return null;
         }
 
@@ -73,7 +83,16 @@ public class TransactionServiceImpl implements TransactionService {
             return null;
         }
 
-        //Create transaction object
+        //Validate currencies
+        if (!srcAccount.getCurrency().equalsIgnoreCase(request.getCurrency())) {
+            return null;
+        }
+
+        if (!dstAccount.getCurrency().equalsIgnoreCase(request.getCurrency())) {
+            return null;
+        }
+
+        //Create tx object
         Transaction transaction = new Transaction();
         transaction.setAmount(request.getAmount());
         transaction.setCurrency(request.getCurrency());
