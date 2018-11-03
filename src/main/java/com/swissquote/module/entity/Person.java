@@ -1,27 +1,26 @@
 package com.swissquote.module.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity(name = "persons")
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
-    private String fullName;
-    private int age;
 
-    public Person(String id, String fullName, int age) {
-        this.id = id;
-        this.fullName = fullName;
-        this.age = age;
+    private String fullName;
+
+    @JsonIgnore
+    private Date dateOfBirth;
+
+    public Person() {
     }
 
     public String getId() {
@@ -40,12 +39,12 @@ public class Person {
         this.fullName = fullName;
     }
 
-    public int getAge() {
-        return age;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     @Override
@@ -57,9 +56,9 @@ public class Person {
         Person person = (Person) o;
 
         return new EqualsBuilder()
-                .append(age, person.age)
                 .append(id, person.id)
                 .append(fullName, person.fullName)
+                .append(dateOfBirth, person.dateOfBirth)
                 .isEquals();
     }
 
@@ -68,7 +67,7 @@ public class Person {
         return new HashCodeBuilder(17, 37)
                 .append(id)
                 .append(fullName)
-                .append(age)
+                .append(dateOfBirth)
                 .toHashCode();
     }
 
@@ -77,7 +76,8 @@ public class Person {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("fullName", fullName)
-                .append("age", age)
+                .append("dateOfBirth", dateOfBirth)
                 .toString();
     }
+
 }
