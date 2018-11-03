@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `currency` varchar(3) NOT NULL DEFAULT '',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Create syntax for TABLE 'persons'
 CREATE TABLE IF NOT EXISTS `persons` (
@@ -25,5 +25,6 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `currency` varchar(3) NOT NULL DEFAULT '',
   `source_account` int(11) NOT NULL,
   `target_account` int(11) DEFAULT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

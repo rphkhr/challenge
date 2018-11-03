@@ -90,11 +90,11 @@ public class TransactionServiceImpl implements TransactionService {
 
         //Validate currencies
         if (!srcAccount.getCurrency().equalsIgnoreCase(request.getCurrency())) {
-            return new SQResponse("Currency conversion not available, try withdrawing in your account's currency");
+            return new SQResponse("Currency conversion not available, try transferring from an account with the same currency as the request");
         }
 
         if (!dstAccount.getCurrency().equalsIgnoreCase(request.getCurrency())) {
-            return new SQResponse("Currency conversion not available, try withdrawing in your account's currency");
+            return new SQResponse("Currency conversion not available, try transferring from an account with the same currency as the request");
         }
 
         //Create tx object
