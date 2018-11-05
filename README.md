@@ -6,7 +6,7 @@
 
 * SpringBoot v1.5.9
 
-* Using Flyway to initialize the database (scripts can be found here)
+* Using Flyway to initialize the database (scripts can be found [here](challenge/src/main/resources/db/migration/V2__init.sql))
 
 * Gradle
 
